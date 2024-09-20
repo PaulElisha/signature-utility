@@ -1,0 +1,5 @@
+SignUtilsTest:testConstructSig() (gas: 23998)
+SignUtilsTest:testHash() (gas: 22348)
+SignUtilsTest:testHashData() (gas: 20516)
+SignUtilsTest:testTypeHashData() (gas: 20886)
+SignUtilsTest:testTypeHashDetails() (gas: 22517)
