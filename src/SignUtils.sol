@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "permit2/interfaces/ISignatureTransfer.sol";
+import "@permit2/interfaces/ISignatureTransfer.sol";
 import "forge-std/Test.sol";
 
-abstract contract SignUtils is Test {
+contract SignUtils is Test {
     bytes32 private immutable _CACHED_DOMAIN_SEPARATOR;
     uint256 private immutable _CACHED_CHAIN_ID;
 
