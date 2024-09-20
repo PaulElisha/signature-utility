@@ -1,66 +1,41 @@
-## Foundry
+## SignUtils
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+This is a signature utility library for the Uniswap Permit2 contract created to help developers building project that integrates Uniswap Permit2 to test their code using the Uniswap Permit2 hash Permit2 calldata, create signature and sign the approvals off-chain.
 
-Foundry consists of:
+## Functions
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+```solidity
+    _hash(
+        ISignatureTransfer.PermitTransferFrom memory permit
+    )
+```
+The hash function is used to hash a Permit parameter using the TypeHash of the struct `TokenPermissions()` and the TypeHash of the `PermitTransferFrom()` struct, appended by other parameters. The result is a messageHash of the parameters. 
 
-## Documentation
 
-https://book.getfoundry.sh/
+```solidity
+    _hash(
+        ISignatureTransfer.PermitBatchTransferFrom memory permit
+    )
+```
+
+The hash function is used to hash a Permit parameter using the TypeHash of the struct `TokenPermissions()` and the TypeHash of the `PermitTransferFrom()` struct, appended by other parameters. The result is a messageHash of the parameters. 
+
+```solidity
+    constructSig(
+        ISignatureTransfer.PermitBatchTransferFrom memory permit,
+        uint256 privKey
+    )
+```
+The construct signature function is used to construct a signature which signs the message and is used to verify the caller of the transaction using the digest and the caller's address.
 
 ## Usage
 
-### Build
+### Installation Guide
 
-```shell
-$ forge build
+```bash
+    forge install PaulElisha/Sign-Utils
 ```
+## Note
+This was initially written as a contract for testing purposes to ensure that all the functions are working perfectly before converting into an abstract contract.
 
-### Test
-
-```shell
-$ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+Also, this is not your conventional EIP712 and EIP2612 Permit hashing and signature scheme so the methods and practices used in testing them do not apply here, Kindly follow the code carefully.
