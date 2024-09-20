@@ -4,7 +4,7 @@ out = "out"
 libs = ["lib"]
 
 remappings = [
-    '@permit2/=lib/permit2/src/',
+    'permit2/=lib/permit2/src/',
     'openzeppelin/=lib/openzeppelin-contracts/contracts',
 ]
 
