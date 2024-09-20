@@ -5,8 +5,7 @@ import "openzeppelin/token/ERC20/IERC20.sol";
 import "../../src/SignUtils.sol";
 
 abstract contract TestHelper {
-    uint256 public constant PRIVATE_KEY =
-        0xe95e23bb89eadd0e4d715cca0540499d37c93ea745e307f985d00f72687bdffe;
+    // uint256 public constant PRIVATE_KEY
 
     function createSignatureTransferDetails(
         IERC20 token,
