@@ -3,4 +3,9 @@ src = "src"
 out = "out"
 libs = ["lib"]
 
+remappings = [
+    'permit2/=lib/Permit2/src/',
+    'openzeppelin/=lib/openzeppelin-contracts/contracts',
+]
+
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
