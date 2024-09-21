@@ -137,7 +137,7 @@ abstract contract SignUtils is Test {
         uint8 v,
         bytes32 r,
         bytes32 s
-    ) private pure returns (bytes memory sig) {
+    ) internal pure returns (bytes memory sig) {
         sig = bytes.concat(r, s, bytes1(v));
     }
 }
