@@ -4,16 +4,6 @@ pragma solidity ^0.8.0;
 import "permit2/interfaces/ISignatureTransfer.sol";
 import "forge-std/Test.sol";
 
-struct Permit2SignatureTransferDetails {
-    ISignatureTransfer.PermitBatchTransferFrom permit;
-    ISignatureTransfer.SignatureTransferDetails[] transferDetails;
-}
-
-struct Permit2SignatureTransferData {
-    ISignatureTransfer.PermitTransferFrom permit;
-    ISignatureTransfer.SignatureTransferDetails transferDetails;
-}
-
 abstract contract SignUtils is Test {
     bytes32 private immutable _CACHED_DOMAIN_SEPARATOR;
     uint256 private immutable _CACHED_CHAIN_ID;
@@ -36,6 +26,16 @@ abstract contract SignUtils is Test {
         keccak256(
             "PermitBatchTransferFrom(TokenPermissions[] permitted,address spender,uint256 nonce,uint256 deadline)TokenPermissions(address token,uint256 amount)"
         );
+
+    struct Permit2SignatureTransferDetails {
+        ISignatureTransfer.PermitBatchTransferFrom permit;
+        ISignatureTransfer.SignatureTransferDetails[] transferDetails;
+    }
+
+    struct Permit2SignatureTransferData {
+        ISignatureTransfer.PermitTransferFrom permit;
+        ISignatureTransfer.SignatureTransferDetails transferDetails;
+    }
 
     constructor() {
         _CACHED_CHAIN_ID = block.chainid;
@@ -111,20 +111,10 @@ abstract contract SignUtils is Test {
     }
 
     function constructSig(
-        Permit2SignatureTransferDetails memory signatureTransferDetails,
+        Permit2SignatureTransferDetails memory _signatureTransferDetails,
         uint256 privKey
     ) public view returns (bytes memory sig) {
-        bytes32 mhash = _hash(signatureTransferDetails.permit);
-
-        (uint8 v, bytes32 r, bytes32 s) = vm.sign(privKey, mhash);
-        sig = getSig(v, r, s);
-    }
-
-    function constructSigData(
-        Permit2SignatureTransferData memory signatureTransferData,
-        uint256 privKey
-    ) public view returns (bytes memory sig) {
-        bytes32 mhash = _hash(signatureTransferData.permit);
+        bytes32 mhash = _hash(_signatureTransferDetails.permit);
 
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(privKey, mhash);
         sig = getSig(v, r, s);
