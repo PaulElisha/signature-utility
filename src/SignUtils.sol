@@ -136,18 +136,18 @@ abstract contract SignUtils is Test {
         return keccak256(abi.encode(_TOKEN_PERMISSIONS_TYPEHASH, permitted));
     }
 
-    function DOMAIN_SEPARATOR() private view returns (bytes32) {
-        return
-            block.chainid == _CACHED_CHAIN_ID
-                ? _CACHED_DOMAIN_SEPARATOR
-                : _buildDomainSeparator(_TYPE_HASH, _HASHED_NAME);
-    }
-
     function getSig(
         uint8 v,
         bytes32 r,
         bytes32 s
     ) internal pure returns (bytes memory sig) {
         sig = bytes.concat(r, s, bytes1(v));
+    }
+
+    function DOMAIN_SEPARATOR() private view returns (bytes32) {
+        return
+            block.chainid == _CACHED_CHAIN_ID
+                ? _CACHED_DOMAIN_SEPARATOR
+                : _buildDomainSeparator(_TYPE_HASH, _HASHED_NAME);
     }
 }

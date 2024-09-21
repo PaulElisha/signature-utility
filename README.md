@@ -39,24 +39,6 @@ The construct signature function is used to construct a signature which signs th
 
 This is an abstract contract so after installation, go ahead to inherit it in your test helper file.
 
-To construct a signature, the following code can be pasted in your test helper file:
-
-```solidity
-    function constructSig(
-        Permit2SignatureTransferDetails memory _signatureTransferDetails,
-        uint256 privKey
-    ) public view returns (bytes memory sig) {
-        bytes32 mhash = _hash(_signatureTransferDetails.permit);
-
-        (uint8 v, bytes32 r, bytes32 s) = vm.sign(privKey, mhash);
-        sig = getSig(v, r, s);
-    }
-```
-
-This takes in the Permit parameter and the private key to sign the message hash.
-
-The `*_hash()*` and the `*getSig()*` function will automatically inherit from SignUtils.
-
 ## Note
 This was initially written as a contract for testing purposes to ensure that all the functions are working perfectly before converting into an abstract contract.
 
