@@ -120,7 +120,7 @@ abstract contract SignUtils is Test {
         sig = getSig(v, r, s);
     }
 
-    function constructSig(
+    function constructSigData(
         Permit2SignatureTransferData memory signatureTransferData,
         uint256 privKey
     ) public view returns (bytes memory sig) {
