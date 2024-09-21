@@ -110,6 +110,16 @@ abstract contract SignUtils is Test {
             );
     }
 
+    function constructSig(
+        ISignatureTransfer.PermitBatchTransferFrom memory permit,
+        uint256 privKey
+    ) public view returns (bytes memory sig) {
+        bytes32 mhash = _hash(permit);
+
+        (uint8 v, bytes32 r, bytes32 s) = vm.sign(privKey, mhash);
+        sig = getSig(v, r, s);
+    }
+
     function _buildDomainSeparator(
         bytes32 typeHash,
         bytes32 nameHash
