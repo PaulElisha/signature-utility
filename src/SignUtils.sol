@@ -27,16 +27,6 @@ abstract contract SignUtils is Test {
             "PermitBatchTransferFrom(TokenPermissions[] permitted,address spender,uint256 nonce,uint256 deadline)TokenPermissions(address token,uint256 amount)"
         );
 
-    struct Permit2SignatureTransferDetails {
-        ISignatureTransfer.PermitBatchTransferFrom permit;
-        ISignatureTransfer.SignatureTransferDetails[] transferDetails;
-    }
-
-    struct Permit2SignatureTransferData {
-        ISignatureTransfer.PermitTransferFrom permit;
-        ISignatureTransfer.SignatureTransferDetails transferDetails;
-    }
-
     constructor() {
         _CACHED_CHAIN_ID = block.chainid;
         _CACHED_DOMAIN_SEPARATOR = _buildDomainSeparator(
@@ -45,9 +35,9 @@ abstract contract SignUtils is Test {
         );
     }
 
-    function _hash(
+    function hashPermit(
         ISignatureTransfer.PermitTransferFrom memory permit
-    ) public view returns (bytes32) {
+    ) internal view returns (bytes32) {
         bytes32 tokenPermissionsHash = _hashTokenPermissions(permit.permitted);
         return
             keccak256(
@@ -61,9 +51,9 @@ abstract contract SignUtils is Test {
             );
     }
 
-    function _hash(
+    function hashBatchPermit(
         ISignatureTransfer.PermitBatchTransferFrom memory permit
-    ) public view returns (bytes32) {
+    ) internal view returns (bytes32) {
         uint256 numPermitted = permit.permitted.length;
         bytes32[] memory tokenPermissionHashes = new bytes32[](numPermitted);
 
@@ -92,31 +82,49 @@ abstract contract SignUtils is Test {
             );
     }
 
-    function _hashTypedData(
+    function hashTypedDataPermit(
         ISignatureTransfer.PermitTransferFrom memory permit
     ) public view returns (bytes32) {
         return
             keccak256(
-                abi.encodePacked("\x19\x01", DOMAIN_SEPARATOR(), _hash(permit))
+                abi.encodePacked(
+                    "\x19\x01",
+                    DOMAIN_SEPARATOR(),
+                    hashPermit(permit)
+                )
             );
     }
 
-    function _hashBatchTypedData(
+    function hashTypedDataBatchPermit(
         ISignatureTransfer.PermitBatchTransferFrom memory permit
     ) public view returns (bytes32) {
         return
             keccak256(
-                abi.encodePacked("\x19\x01", DOMAIN_SEPARATOR(), _hash(permit))
+                abi.encodePacked(
+                    "\x19\x01",
+                    DOMAIN_SEPARATOR(),
+                    hashBatchPermit(permit)
+                )
             );
     }
 
-    function constructSig(
+    function constructSigPermit(
+        ISignatureTransfer.PermitTransferFrom memory permit,
+        uint256 privKey
+    ) public view returns (bytes memory sig) {
+        bytes32 digest = hashTypedDataPermit(permit);
+
+        (uint8 v, bytes32 r, bytes32 s) = vm.sign(privKey, digest);
+        sig = getSig(v, r, s);
+    }
+
+    function constructSigBatchPermit(
         ISignatureTransfer.PermitBatchTransferFrom memory permit,
         uint256 privKey
     ) public view returns (bytes memory sig) {
-        bytes32 mhash = _hash(permit);
+        bytes32 digest = hashTypedDataBatchPermit(permit);
 
-        (uint8 v, bytes32 r, bytes32 s) = vm.sign(privKey, mhash);
+        (uint8 v, bytes32 r, bytes32 s) = vm.sign(privKey, digest);
         sig = getSig(v, r, s);
     }
 
