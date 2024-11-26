@@ -5,7 +5,7 @@ import "permit2/interfaces/ISignatureTransfer.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {Vm} from "forge-std/Vm.sol";
 
-contract TestHelper {
+contract SignUtils {
     Vm private constant vm =
         Vm(address(uint160(uint256(keccak256("hevm cheat code")))));
 
